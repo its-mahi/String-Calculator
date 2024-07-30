@@ -1,5 +1,5 @@
 #include "StringCalculator.h"
-#include <sstream>
+#include <string>
 #include <stdexcept>
 
 using namespace std;
@@ -20,24 +20,60 @@ int StringCalculator::add(const string &numbers) {
 }
 
 vector<int> StringCalculator::parseNumbers(const string &numbers) {
+
+    string processedNumbers = numbers;
+    string delimiter = extractDelimiter(processedNumbers);
+
+    return splitNumbers(processedNumbers, delimiter);
+}
+
+string StringCalculator::extractDelimiter(string &numbers) {
+
+    if (numbers.substr(0, 2) == "//") {
+        int pos = numbers.find('\n');
+
+        if (pos < 3) {
+            throw invalid_argument("Invalid format for delimiter");
+        }
+
+        string delimiter = numbers.substr(2, pos - 2);
+        numbers = numbers.substr(pos + 1);
+
+        return delimiter;
+    }
+
+    return ",\n";       // default delimiter
+}
+
+vector<int> StringCalculator::splitNumbers(const string &numbers, const string &delimiter) {
     vector<int> result;
     string currentNumber;
-    
-    for (char c : numbers) {
-        if (c == ',' || c == '\n') {
-            if (currentNumber != "") {
-                result.push_back(stoi(currentNumber));
-                currentNumber = "";
+    string delimiters = delimiter + "\n";
+
+    int pos = 0;
+
+    while (pos < numbers.length()) {
+
+        int delPos = numbers.length();
+
+        for (int i=pos; i<numbers.length(); i++) {
+
+            if (delimiters.find(numbers[i]) != string::npos) {
+
+                delPos = i;
+                break;
             }
+
         }
-        else {
-            currentNumber += c;
+        
+        string numberPart = numbers.substr(pos, delPos - pos);
+        
+        if (numberPart != "") {
+            result.push_back(stoi(numberPart));
         }
+        
+        pos = delPos + 1;
     }
-    
-    if (currentNumber != "") {
-        result.push_back(stoi(currentNumber));
-    }
-    
+
     return result;
 }
