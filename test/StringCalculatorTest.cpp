@@ -38,3 +38,32 @@ TEST(StringCalculatorTest, HandlesCustomDelimiter) {
     EXPECT_EQ(calc.add("//:\n12\n2\n1"), 15);
     EXPECT_EQ(calc.add("//:::\n12:::2\n1"), 15);
 }
+
+TEST(StringCalculatorTest, ThrowsExceptionForNegativeNumber) {
+    StringCalculator calc;
+
+    /*** 1 ***/
+    try {
+        calc.add("-1,-2,3");
+        FAIL() << "Expected runtime_error";
+    } 
+    catch (const runtime_error &err) {
+        EXPECT_EQ(err.what(), string("Negative numbers not allowed : -1, -2"));
+    } 
+    catch (...) {
+        FAIL() << "Expected runtime_error";
+    }
+
+
+    /*** 2 ***/
+    try {
+        calc.add("1,2,-3");
+        FAIL() << "Expected runtime_error";
+    } 
+    catch (const runtime_error &err) {
+        EXPECT_EQ(err.what(), string("Negative numbers not allowed : -3"));
+    } 
+    catch (...) {
+        FAIL() << "Expected runtime_error";
+    }
+}

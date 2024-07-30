@@ -1,6 +1,8 @@
 #include "StringCalculator.h"
 #include <string>
 #include <stdexcept>
+#include <iostream>
+
 
 using namespace std;
 
@@ -47,6 +49,8 @@ string StringCalculator::extractDelimiter(string &numbers) {
 
 vector<int> StringCalculator::splitNumbers(const string &numbers, const string &delimiter) {
     vector<int> result;
+    vector<int> negativeNumbers;
+
     string currentNumber;
     string delimiters = delimiter + "\n";
 
@@ -54,25 +58,45 @@ vector<int> StringCalculator::splitNumbers(const string &numbers, const string &
 
     while (pos < numbers.length()) {
 
-        int delPos = numbers.length();
+        int delimiterPosition = numbers.length();
 
         for (int i=pos; i<numbers.length(); i++) {
 
             if (delimiters.find(numbers[i]) != string::npos) {
 
-                delPos = i;
+                delimiterPosition = i;
                 break;
             }
 
         }
         
-        string numberPart = numbers.substr(pos, delPos - pos);
+        string numberString = numbers.substr(pos, delimiterPosition - pos);
         
-        if (numberPart != "") {
-            result.push_back(stoi(numberPart));
+        if (numberString != "") {
+            int num = stoi(numberString);
+
+            if (num < 0) {
+                negativeNumbers.push_back(num);
+            }
+            
+            result.push_back(num);
         }
         
-        pos = delPos + 1;
+        pos = delimiterPosition + 1;
+    }
+
+    if (!negativeNumbers.empty()) {
+        string errorMessage = "Negative numbers not allowed : ";
+
+        for (int i = 0; i < negativeNumbers.size() ; i++) {
+            errorMessage += to_string(negativeNumbers[i]);
+
+            if (i < negativeNumbers.size() - 1) {
+                errorMessage += ", ";
+            }
+        }
+
+        throw runtime_error(errorMessage);
     }
 
     return result;
