@@ -12,8 +12,8 @@ public:
 
 private:
     vector<int> parseNumbers(const string &numbers);
-    string extractDelimiter(string &numbers);
-    vector<int> splitNumbers(const string &numbers, const string &delimiter);
+    vector<string> extractDelimiter(string &numbers);
+    vector<int> splitNumbers(const string &numbers, const vector<string> &delimiter);
 };
 
 #endif

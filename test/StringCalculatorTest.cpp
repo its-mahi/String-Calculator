@@ -42,6 +42,7 @@ TEST(StringCalculatorTest, HandlesMultipleNumbersReturnSum) {
 TEST(StringCalculatorTest, HandlesNewLineDelimiter) {
     StringCalculator calc;
     EXPECT_EQ(calc.add("1\n2,3"), 6);
+    EXPECT_EQ(calc.add("\n2\n2\n\n\n2\n"), 6);
 }
 
 /*
@@ -53,6 +54,7 @@ TEST(StringCalculatorTest, HandlesCustomDelimiter) {
     StringCalculator calc;
 
     EXPECT_EQ(calc.add("//;\n1;2"), 3);
+    EXPECT_EQ(calc.add("//;\n1;;2"), 3);
     EXPECT_EQ(calc.add("//|\n1|2|3"), 6);
     EXPECT_EQ(calc.add("//:\n12:2\n1"), 15);
     EXPECT_EQ(calc.add("//:\n12:2:1"), 15);
@@ -116,4 +118,18 @@ TEST(StringCalculatorTest, NumbersGreaterThan1000) {
     EXPECT_EQ(calc.add("2,1001"), 2);
     EXPECT_EQ(calc.add("2,1000,5555,1001"), 1002);
     EXPECT_EQ(calc.add("1,999,1001,1002"), 1000);
+}
+
+/*
+    [ Test Case 9 ] : string with multiple delimiters, with length of delimiter is greater than or equal to 1
+*/
+TEST(StringCalculatorTest, MultipleCustomDelimiters) {
+    StringCalculator calc;
+    EXPECT_EQ(calc.add("//[*][%]\n1*2%3"), 6);
+    EXPECT_EQ(calc.add("//[***][%%%]\n10***20%%%30"), 60);
+    EXPECT_EQ(calc.add("//[\\n][%%%]\n10\n20%%%30"), 60);
+    EXPECT_EQ(calc.add("//[\\\\n]\n1\\\n2"), 3);
+    EXPECT_EQ(calc.add("//[\\\\n]\n1\\\n2"), 3);
+    
+    EXPECT_EQ(calc.add("//[\\]\n1\\2"), 3);
 }

@@ -25,16 +25,18 @@ int StringCalculator::add(const string &numbers) {
 vector<int> StringCalculator::parseNumbers(const string &numbers) {
 
     string processedNumbers = numbers;
-    string delimiter = extractDelimiter(processedNumbers);
+    vector<string> delimiter = extractDelimiter(processedNumbers);
 
     return splitNumbers(processedNumbers, delimiter);
 }
 
 /* 
-    [ extractDelimiter ] : extract delimiter from given string and return the value of delimiter, 
-                           if custom delimiter is not given then by default it returns ",\n"
+    [ extractDelimiter ] : extract delimiter from given string and return the value of all delimiters in vector of string, 
+                           if custom delimiter is not given then by default it returns {",", "\n"}
 */
-string StringCalculator::extractDelimiter(string &numbers) {
+vector<string> StringCalculator::extractDelimiter(string &numbers) {
+
+    vector<string> delimiters;
 
     if (numbers.substr(0, 2) == "//") {
         int pos = numbers.find('\n');
@@ -43,47 +45,72 @@ string StringCalculator::extractDelimiter(string &numbers) {
             throw invalid_argument("Invalid format for delimiter");
         }
 
-        string delimiter = numbers.substr(2, pos - 2);
+        string section = numbers.substr(2, pos - 2);
         numbers = numbers.substr(pos + 1);
 
-        return delimiter;
-    }
+        if (section[0] == '[' && section.back() == ']') {
+            
+            int start = 0, end = -1;
+            
+            start = section.find('[', start);
 
-    return ",\n";       // default delimiter
+            while (start != string::npos) {
+                end = section.find(']', start);
+                
+                if (end == string::npos) {
+                    throw runtime_error("invalid delimiter : missing closing bracket");
+                }
+                delimiters.push_back(section.substr(start + 1, end - start - 1));
+
+                start = section.find('[', end + 1);
+            }
+        } else {
+            delimiters.push_back(section);
+        }
+    }
+    else {
+        delimiters.push_back(",");
+    }
+    
+    delimiters.push_back("\n");
+
+    return delimiters;
 }
 
 /* 
     [ splitNumbers ] : returns vector of all positive numbers which is less than or equal to 1000
-                       seperate all numbers with given delimiter from the given string
+                       seperate all numbers with given delimiters from the given string
 */
 
-vector<int> StringCalculator::splitNumbers(const string &numbers, const string &delimiter) {
+vector<int> StringCalculator::splitNumbers(const string &numbers, const vector<string> &delimiters) {
     vector<int> result;
     vector<int> negativeNumbers;
-
-    string currentNumber;
-    string delimiters = delimiter + "\n";
 
     int pos = 0;
 
     while (pos < numbers.length()) {
 
-        int delimiterPosition = numbers.length();
+        int position = -1;
+        int length = 0;
+        
+        // Find the first match delimiter in the remaining string
+        for (auto delimiter : delimiters) {
+            
+            auto currentPos = numbers.find(delimiter, pos);
 
-        for (int i=pos; i<numbers.length(); i++) {
-
-            if (delimiters.find(numbers[i]) != string::npos) {
-
-                delimiterPosition = i;
-                break;
+            if (currentPos < position) {
+                position = currentPos;
+                length = delimiter.length();
             }
-
         }
-        
-        string numberString = numbers.substr(pos, delimiterPosition - pos);
-        
 
-        // fetched next number and convert it into integer and push it into the vector
+        // if delimiter not found, set position to the end of the string
+        if (position == -1) {
+            position = numbers.length();
+        }
+
+        string numberString = numbers.substr(pos, position - pos);
+
         if (numberString != "") {
             int num = stoi(numberString);
 
@@ -94,8 +121,8 @@ vector<int> StringCalculator::splitNumbers(const string &numbers, const string &
                 result.push_back(num);
             }
         }
-        
-        pos = delimiterPosition + 1;
+
+        pos = position + length;
     }
 
     // if there is any negative numbers present, throw an exception with message of all negative numbers mentioned
