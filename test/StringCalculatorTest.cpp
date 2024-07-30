@@ -133,3 +133,36 @@ TEST(StringCalculatorTest, MultipleCustomDelimiters) {
     
     EXPECT_EQ(calc.add("//[\\]\n1\\2"), 3);
 }
+
+
+
+/*
+    [ Test Case 10 ] : count number of times add() method called
+*/
+TEST(StringCalculatorTest, HandlesGetCalledCount) {
+    StringCalculator calc;
+    
+    // call add() a few times
+    calc.add("1,2");
+    calc.add("3,4");
+    
+    // test the GetCalledCount() method
+    EXPECT_EQ(calc.getCalledCount(), 2);
+}
+
+TEST(StringCalculatorTest, HandlesGetCalledCountAfterMultipleCalls) {
+    StringCalculator calc;
+    
+    calc.add("1,2");
+    calc.add("20\n4");
+    calc.add("3");
+    calc.add("4,5");
+    
+    EXPECT_EQ(calc.getCalledCount(), 4);
+}
+
+TEST(StringCalculatorTest, HandlesGetCalledCountNoCalls) {
+    StringCalculator calc;
+    
+    EXPECT_EQ(calc.getCalledCount(), 0);
+}

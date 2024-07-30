@@ -6,6 +6,7 @@ using namespace std;
 
 //  [ add ] : uses various methods and returns the sum of all positive numbers.
 int StringCalculator::add(const string &numbers) {
+    addCalledCount++;
     
     if(numbers == "") {
         return 0;
@@ -18,6 +19,12 @@ int StringCalculator::add(const string &numbers) {
     }
     
     return sum;
+}
+
+// [ getCalledCount ] : return the value of count that add() method called.
+
+int StringCalculator::getCalledCount() {
+    return addCalledCount;
 }
 
 // [ parseNumber ] : parse the given string and return the vector of all positive numbers.

@@ -10,6 +10,7 @@ The String Calculator is designed to handle:
 - **Custom Delimiters**: Accommodate user-defined delimiters, whether they are single characters or sequences of characters.
 - **Error Handling**: Identify negative numbers in the input and provide detailed error messages for better debugging.
 - **Ignore Large Numbers**: Automatically disregard any numbers larger than 1000 when calculating the sum.
+- **Call Count Tracking**: Track how many times the `Add()` method has been invoked.
 
 ## Getting Started
 
