@@ -88,4 +88,58 @@ The String Calculator project is based on the **TDD Kata 1 - String Calculator**
 4. **Advanced Features**:
    - Support delimiters of any length and multiple delimiters, e.g., `"//[***]\n1***2***3" == 6` or `"//[*][%]\n1*2%3" == 6`.
 
+## Test Cases
+
+1. **Empty String Should Return 0**  
+   **Test**: `EmptyStringReturnsZero`  
+   - Returns 0 for an empty string.  
+   - Example: `""` -> `0`
+
+2. **Single Number String Should Return That Number**  
+   **Test**: `SingleNumberReturnsItself`  
+   - Returns the number itself for a single number string.  
+   - Examples: `"1"` -> `1`, `"24"` -> `24`
+
+3. **Two Number String Should Return Sum of Two**  
+   **Test**: `TwoNumbersReturnSum`  
+   - Returns the sum of two numbers separated by a comma.  
+   - Example: `"1,5"` -> `6`
+
+4. **Multiple Numbers Return Sum**  
+   **Test**: `HandlesMultipleNumbersReturnSum`  
+   - Returns the sum of all numbers in the string.  
+   - Example: `"1,2,3,4,5"` -> `15`
+
+5. **Newline as Delimiter**  
+   **Test**: `HandlesNewLineDelimiter`  
+   - Handles `\n` as a delimiter.  
+   - Examples: `"1\n2,3"` -> `6`, `"\n2\n2\n\n\n2\n"` -> `6`
+
+6. **Custom Delimiter Handling**  
+   **Test**: `HandlesCustomDelimiter`  
+   - Handle string with custom delimiters and returns the sum of all numbers.
+   - Examples: `"//;\n1;2"` -> `3`
+
+7. **Exception for Negative Numbers**  
+   **Test**: `ThrowsExceptionForNegativeNumber`  
+   - Throws an exception for negative numbers, listing them.  
+   - Example: `"-1,-2,3"` -> Exception with message "Negative numbers not allowed : -1, -2"
+
+8. **Ignore Numbers > 1000**  
+   **Test**: `NumbersGreaterThan1000`  
+   - Ignores numbers greater than 1000.  
+   - Example: `"2,1001"` -> `2`
+
+9. **Multiple Delimiters**  
+   **Test**: `MultipleCustomDelimiters`  
+   - Supports multiple delimiters of any length.  
+   - Examples: `"//[*][%]\n1*2%3"` -> `6`, `"//[***][%%%]\n10***20%%%30"` -> `60`
+
+10. **Method Call Count**  
+    **Tests**: `HandlesGetCalledCount`, `HandlesGetCalledCountAfterMultipleCalls`, `HandlesGetCalledCountNoCalls`  
+    - Verifies the count of `add()` method calls.  
+    - Examples: After `calc.add("1,2"); calc.add("3,4");` -> `calc.getCalledCount()` -> `2`
+
 <hr/>
+
+
