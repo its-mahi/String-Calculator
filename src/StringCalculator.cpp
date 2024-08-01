@@ -12,13 +12,30 @@ int StringCalculator::add(const string &numbers) {
         return 0;
     }
 
-    vector<int> numElement = parseNumbers(numbers);
-    int sum = 0;
-    for (auto num : numElement) {
-        sum += num;
-    }
     
-    return sum;
+
+    pair<vector<int>, bool> numElementPair = parseNumbers(numbers);
+
+    vector<int> numElement = numElementPair.first;
+    bool isAdd = numElementPair.second;
+
+
+    
+    if(isAdd) {
+        int sum = 0;
+        for (auto num : numElement) {
+            sum += num;
+        }
+
+        return sum;
+    }
+    else {
+        int result = 1;
+        for(auto num : numElement) {
+            result *= num;
+        }
+        return result;
+    }
 }
 
 // [ getCalledCount ] : return the value of count that add() method called.
@@ -29,12 +46,20 @@ int StringCalculator::getCalledCount() {
 
 // [ parseNumber ] : parse the given string and return the vector of all positive numbers.
 
-vector<int> StringCalculator::parseNumbers(const string &numbers) {
+pair<vector<int>, bool> StringCalculator::parseNumbers(const string &numbers) {
 
     string processedNumbers = numbers;
     vector<string> delimiter = extractDelimiter(processedNumbers);
 
-    return splitNumbers(processedNumbers, delimiter);
+    vector<int> number_splitted = splitNumbers(processedNumbers, delimiter);
+
+    for(auto i : delimiter) {
+        if(i == "*") {
+            return make_pair(number_splitted, false);
+        }
+    }
+
+    return make_pair(number_splitted, true);
 }
 
 /* 

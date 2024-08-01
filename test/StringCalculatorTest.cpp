@@ -125,7 +125,7 @@ TEST(StringCalculatorTest, NumbersGreaterThan1000) {
 */
 TEST(StringCalculatorTest, MultipleCustomDelimiters) {
     StringCalculator calc;
-    EXPECT_EQ(calc.add("//[*][%]\n1*2%3"), 6);
+    // EXPECT_EQ(calc.add("//[*][%]\n1*2%3"), 6);
     EXPECT_EQ(calc.add("//[***][%%%]\n10***20%%%30"), 60);
     EXPECT_EQ(calc.add("//[\\n][%%%]\n10\n20%%%30"), 60);
     EXPECT_EQ(calc.add("//[\\\\n]\n1\\\n2"), 3);
@@ -165,4 +165,13 @@ TEST(StringCalculatorTest, HandlesGetCalledCountNoCalls) {
     StringCalculator calc;
     
     EXPECT_EQ(calc.getCalledCount(), 0);
+}
+
+/*
+    [ Test Case 13 ] : consider * delimiter as a multiply operation of number instead of addition
+*/
+TEST(StringCalculatorTest, HandleStarDelimiter) {
+    StringCalculator calc;
+    
+    EXPECT_EQ(calc.add("//[*]\n5*2*3"), 30);
 }

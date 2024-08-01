@@ -14,7 +14,7 @@ public:
 private:
     int addCalledCount = 0;
 
-    vector<int> parseNumbers(const string &numbers);
+    pair<vector<int>, bool> parseNumbers(const string &numbers);
     vector<string> extractDelimiter(string &numbers);
     vector<int> splitNumbers(const string &numbers, const vector<string> &delimiter);
 };
